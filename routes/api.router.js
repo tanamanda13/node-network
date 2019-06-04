@@ -4,6 +4,7 @@ Configurer le module de route
 */
     const express = require('express');
     const router = express.Router();
+    const bcrypt = require('bcryptjs');
 //
 
 /* 
@@ -31,17 +32,24 @@ route Auth
             req.body.email.length > 4 &&
             req.body.password.length > 4
         ){
-            // Définir l'item
-            const newItem = { pseudo: req.body.pseudo, email : req.body.email, password : req.body.password };
+            // Generate password hash
+            bcrypt.hash(req.body.password, 10)
+            .then( hashedPassword => {
+                // Définir l'item
+                const newItem = { pseudo: req.body.pseudo, email : req.body.email, password : hashedPassword };
 
-            // Enregistrer l'item
-            connexion.query(`INSERT INTO user SET ?`, newItem, (err, result, fields) => {
-                if( err ){
-                    res.json({ msg: 'Connection failed', data: err })
-                }
-                else{
-                    res.json({ msg: 'User registrated', data: result })
-                }
+                // Enregistrer l'item
+                connexion.query(`INSERT INTO user SET ?`, newItem, (err, result, fields) => {
+                    if( err ){
+                        res.json({ msg: 'Connection failed', data: err })
+                    }
+                    else{
+                        res.json({ msg: 'User registrated', data: result })
+                    }
+                })
+            })
+            .catch( errorHash => {
+                res.json({ msg: 'Error hash', data: errorHash })
             })
         }
         else{
