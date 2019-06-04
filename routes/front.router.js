@@ -18,6 +18,11 @@ Définition des routes
     router.get('/register', (req, res) => {
         res.render('register', { title: 'Créez votre compte', isLogged: false });
     });
+
+    // Connexion
+    router.get('/login', (req, res) => {
+        res.render('login', { title: 'Connectez-vous', isLogged: false });
+    });
 //
 
 

@@ -56,6 +56,38 @@ route Auth
             return res.json({ data: 'no body' })
         }
     })
+
+    // Login user
+    router.post('/auth/login', (req, res) => {
+        if( 
+            req.body &&
+            req.body.email.length > 4 &&
+            req.body.password.length > 4
+        ){
+            // Search for user email
+        connexion.query(`SELECT * FROM user WHERE email="${req.body.email}"`, (err, result, fields) => {
+                if( err ){
+                    res.json({ msg: 'Connection failed', data: err })
+                }
+                else{
+                    // Check password
+                    const validPassword = bcrypt.compareSync( req.body.password, result[0].password )
+                    console.log(req.body.password)
+                    console.log(result[0].password)
+
+                    if(validPassword){
+                        res.json({ msg: 'User logged', data: result })
+                    }
+                    else{
+                        res.json({ msg: 'Wrong password', data: null })
+                    }
+                }
+            })
+        }
+        else{
+            return res.json({ data: 'no body' })
+        }
+    })
 //
 
 /*

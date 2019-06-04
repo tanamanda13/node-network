@@ -79,6 +79,22 @@ Wait for DOM element
                     checkRegisterForm(pseudo.value, email.value, password.value, passwordRepeat.value)
                 })
             }
+
+            // Login page
+            if( document.querySelector('.login-page') != undefined ){
+                // Declaration
+                const loginForm = document.querySelector('#loginForm');
+                const email = document.querySelector('#email');
+                const password = document.querySelector('#password');
+
+                // Get form submit
+                loginForm.addEventListener('submit', event => {
+                    // Stop event propogation
+                    event.preventDefault();
+                    
+                    asyncFetch('/api/auth/login', 'POST', { email: email.value, password: password.value })
+                })
+            }
         //
 
 
