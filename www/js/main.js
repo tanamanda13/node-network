@@ -18,7 +18,15 @@ Wait for DOM element
                         body: JSON.stringify( data )
                     })
 
-                    console.log(response)
+                    // Check request
+                    if(response.ok){
+                        // Extract JSON from response
+                        const jsonResponse = await response.json()
+                        console.log(jsonResponse)
+                    }
+                    else{
+                        console.log('Error request')
+                    }
 
                 }
                 else if( type === 'GET' ){

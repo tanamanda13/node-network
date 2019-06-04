@@ -31,7 +31,18 @@ route Auth
             req.body.email.length > 4 &&
             req.body.password.length > 4
         ){
-            return res.json({ data: req.body })
+            // Définir l'item
+            const newItem = { pseudo: req.body.pseudo, email : req.body.email, password : req.body.password };
+
+            // Enregistrer l'item
+            connexion.query(`INSERT INTO user SET ?`, newItem, (err, result, fields) => {
+                if( err ){
+                    res.json({ msg: 'Connection failed', data: err })
+                }
+                else{
+                    res.json({ msg: 'User registrated', data: result })
+                }
+            })
         }
         else{
             return res.json({ data: 'no body' })
